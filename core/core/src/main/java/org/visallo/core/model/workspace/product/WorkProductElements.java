@@ -20,9 +20,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class WorkProductElements implements WorkProduct, WorkProductHasElements {
     public static final String WORKSPACE_PRODUCT_TO_ENTITY_RELATIONSHIP_IRI = "http://visallo.org/workspace/product#toEntity";
+    private static boolean ontologyUpdated = false;
 
     protected WorkProductElements(OntologyRepository ontologyRepository) {
-        addProductToEntityRelationshipToOntology(ontologyRepository);
+        if (!ontologyUpdated) {
+            addProductToEntityRelationshipToOntology(ontologyRepository);
+            ontologyUpdated = true;
+        }
     }
 
     private void addProductToEntityRelationshipToOntology(OntologyRepository ontologyRepository) {
@@ -42,7 +46,6 @@ public abstract class WorkProductElements implements WorkProduct, WorkProductHas
                 rangeConcepts,
                 WORKSPACE_PRODUCT_TO_ENTITY_RELATIONSHIP_IRI
         );
-        ontologyRepository.clearCache();
     }
 
     @Override
